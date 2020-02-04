@@ -1,5 +1,8 @@
 package edu.wctc;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -7,7 +10,7 @@ public class Main {
     private Scanner keyboard;
     private Cookbook cookbook;
 
-    public Main() {
+    public Main() throws FileNotFoundException {
         keyboard = new Scanner(System.in);
         cookbook = new Cookbook();
 
@@ -24,7 +27,7 @@ public class Main {
         runMenu();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         new Main();
     }
 
@@ -39,7 +42,7 @@ public class Main {
         System.out.print("Please Enter your Choice: ");
     }
 
-    private void runMenu() {
+    private void runMenu() throws FileNotFoundException {
         boolean userContinue = true;
 
         while (userContinue) {
@@ -57,7 +60,7 @@ public class Main {
                     searchByName();
                     break;
                 case "4":
-                    // doControlBreak();
+                    doControlBreak();
                     break;
                 case "5":
                     userContinue = false;
@@ -97,9 +100,46 @@ public class Main {
     }
 
     private void searchByName() {
-        keyboard.nextLine();
         System.out.print("Please Enter Value: ");
         String ans = keyboard.nextLine();
         cookbook.printByNameSearch(ans);
+    }
+
+    private void doControlBreak() throws FileNotFoundException {
+        File file = new File("meals_data.csv");
+        Scanner sc = new Scanner(file);
+
+        if (file.exists()) {
+            System.out.println("Meal Type\tTotal\tMean\tMin\tMax\tMedian");
+            ArrayList<Integer> cals = new ArrayList<>();
+            while (sc.hasNext()) {
+                String line = sc.nextLine();
+                String[] meal = line.split(",");
+                String currentMealType = "";
+                String nextMealType = meal[0];
+                String item = meal[1];
+                String mealCal = meal[2];
+                int calTotal = 0;
+
+                if(currentMealType.equalsIgnoreCase("") || nextMealType.equalsIgnoreCase(currentMealType)) {
+                    cals.add(Integer.parseInt(mealCal));
+                    if (currentMealType.equalsIgnoreCase("")) {
+                        currentMealType = nextMealType;
+                    }
+                } else {
+                    for(int i = 0; i < (cals.size() - 1); i++) {
+                        for(int j = 0; j < cals.size() - i - 1; j++) {
+                            if(cals.get(j).compareTo(cals.get(j + 1)) > 0) {
+                                int temp = cals.get(j);
+                                cals.set(j, cals.get(j+1));
+                                cals.set(j+1, temp);
+                            }
+                        }
+                    }
+                }
+                System.out.println(currentMealType);
+
+            }
+        }
     }
 }
