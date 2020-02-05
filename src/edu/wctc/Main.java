@@ -115,36 +115,38 @@ public class Main {
             String currentMealType = "";
             String nextMealType = null;
             int calTotal = 0;
-            int median = (cals.size()/2);
-            for(int x = 1; x <= 4; x++) {
-                while (sc.hasNext()) {
-                    String line = sc.nextLine();
-                    String[] meal = line.split(",");
-                    nextMealType = meal[0];
-                    String mealCal = meal[2];
+            int median = (cals.size() / 2);
+            while (sc.hasNext()) {
+                String line = sc.nextLine();
+                String[] meal = line.split(",");
+                nextMealType = meal[0];
+                String mealCal = meal[2];
 
-                    if (nextMealType.equalsIgnoreCase(currentMealType) || currentMealType.equalsIgnoreCase("")) {
-                        cals.add(Integer.parseInt(mealCal));
-                        if (currentMealType.equalsIgnoreCase("")) {
-                            currentMealType = nextMealType;
-                        }
-                    } else {
-                        for (int i = 0; i < (cals.size() - 1); i++) {
-                            for (int j = 0; j < cals.size() - i - 1; j++) {
-                                if (cals.get(j).compareTo(cals.get(j + 1)) > 0) {
-                                    int temp = cals.get(j);
-                                    cals.set(j, cals.get(j + 1));
-                                    cals.set(j + 1, temp);
-                                }
+                if (nextMealType.equalsIgnoreCase(currentMealType) || currentMealType.equalsIgnoreCase("")) {
+                    cals.add(Integer.parseInt(mealCal));
+                    if (currentMealType.equalsIgnoreCase("")) {
+                        currentMealType = nextMealType;
+                    }
+                } else {
+                    for (int i = 0; i < (cals.size() - 1); i++) {
+                        for (int j = 0; j < cals.size() - i - 1; j++) {
+                            if (cals.get(j).compareTo(cals.get(j + 1)) > 0) {
+                                int temp = cals.get(j);
+                                cals.set(j, cals.get(j + 1));
+                                cals.set(j + 1, temp);
                             }
                         }
-                        for (int i = 0; i < cals.size(); i++) {
-                            calTotal += cals.get(i);
-                        }
                     }
+                    for (int i = 0; i < cals.size(); i++) {
+                        calTotal += cals.get(i);
+                    }
+                    System.out.println(currentMealType + "\t" + calTotal + "\t" + (calTotal / (cals.size())) + "\t" + cals.get(0) + "\t" + cals.get(cals.size() - 1) + "\t" + cals.get(median));
+                    currentMealType = nextMealType;
+                    cals.clear();
+                    cals.add(Integer.parseInt(mealCal));
                 }
-                System.out.println(currentMealType +"\t"+ calTotal +"\t"+ (calTotal/(cals.size())) +"\t"+ cals.get(0) +"\t"+ cals.get(cals.size()-1) +"\t"+ cals.get(median));
             }
         }
     }
 }
+
