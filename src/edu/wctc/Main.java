@@ -122,7 +122,7 @@ public class Main {
                 nextMealType = meal[0];
                 String mealCal = meal[2];
 
-                if (nextMealType.equalsIgnoreCase(currentMealType) || currentMealType.equalsIgnoreCase("")) {
+                if ((nextMealType.equalsIgnoreCase(currentMealType) || currentMealType.equalsIgnoreCase("")) && sc.hasNext()) {
                     cals.add(Integer.parseInt(mealCal));
                     if (currentMealType.equalsIgnoreCase("")) {
                         currentMealType = nextMealType;
